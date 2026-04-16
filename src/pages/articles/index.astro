@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import { getCollection } from 'astro:content';
+import { categories, type CategoryKey } from '../../lib/categories';
+
+const allArticles = await getCollection('articles', ({ data }) => !data.draft);
+const sortedArticles = allArticles.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const collectionJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Tous les articles',
+  description: 'Tous nos articles sur les métiers, formations, écoles et l\'orientation professionnelle.',
+  url: 'https://clg-f-legros.fr/articles',
+};
+---
+
+<BaseLayout
+  title="Tous les articles | CLG F. Legros"
+  description="Retrouvez tous nos articles sur les métiers, formations, écoles et l'orientation professionnelle."
+  jsonLd={collectionJsonLd}
+>
+  <div class="max-w-6xl mx-auto px-4 py-8">
+    <Breadcrumb items={[{ label: 'Articles' }]} />
+
+    <div class="mb-10">
+      <span class="text-primary-600 font-semibold text-sm uppercase tracking-wider">Blog</span>
+      <h1 class="font-display text-3xl md:text-4xl font-extrabold text-navy-800 tracking-tight mt-1">Tous les articles</h1>
+      <p class="text-slate-500 mt-2 max-w-xl">
+        Retrouvez tous nos guides, fiches métiers et actualités sur la formation et l'emploi.
+      </p>
+    </div>
+
+    <!-- Category filters -->
+    <div class="flex flex-wrap gap-2 mb-10">
+      <a href="/articles" class="px-4 py-2 text-sm font-semibold rounded-lg bg-primary-600 text-white shadow-sm">
+        Tous
+      </a>
+      {Object.entries(categories).map(([key, cat]) => (
+        <a
+          href={`/categorie/${key}`}
+          class="px-4 py-2 text-sm font-medium rounded-lg border border-slate-200 text-slate-600 hover:border-primary-300 hover:text-primary-700 hover:bg-primary-50/50 transition-all"
+        >
+          {cat.label}
+        </a>
+      ))}
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {sortedArticles.map((article) => (
+        <ArticleCard
+          title={article.data.title}
+          description={article.data.description}
+          image={article.data.image}
+          imageAlt={article.data.imageAlt}
+          date={article.data.date}
+          categorie={article.data.categorie}
+          href={`/articles/${article.id}`}
+        />
+      ))}
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,96 @@
+---
+import CategoryBadge from './CategoryBadge.astro';
+import type { CategoryKey } from '../lib/categories';
+
+interface Props {
+  title: string;
+  description: string;
+  image: string;
+  imageAlt: string;
+  date: Date;
+  categorie: CategoryKey;
+  href: string;
+  featured?: boolean;
+}
+
+const { title, description, image, imageAlt, date, categorie, href, featured = false } = Astro.props;
+
+const formattedDate = date.toLocaleDateString('fr-FR', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+{featured ? (
+  <!-- Featured card: horizontal layout -->
+  <article class="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-200/60 md:grid md:grid-cols-2">
+    <a href={href} class="block overflow-hidden">
+      <div class="aspect-video md:aspect-auto md:h-full bg-slate-100">
+        <img
+          src={image}
+          alt={imageAlt}
+          width="720"
+          height="405"
+          loading="lazy"
+          decoding="async"
+          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+        />
+      </div>
+    </a>
+    <div class="p-6 md:p-8 flex flex-col justify-center">
+      <div class="flex items-center gap-3 mb-4">
+        <CategoryBadge categorie={categorie} />
+        <time datetime={date.toISOString()} class="text-xs text-slate-400 font-medium">
+          {formattedDate}
+        </time>
+      </div>
+      <a href={href} class="block">
+        <h3 class="font-display text-xl md:text-2xl font-bold text-navy-800 mb-3 group-hover:text-primary-700 transition-colors leading-snug tracking-tight">
+          {title}
+        </h3>
+      </a>
+      <p class="text-slate-500 leading-relaxed mb-4 line-clamp-3">{description}</p>
+      <a href={href} class="inline-flex items-center gap-1.5 text-primary-600 font-semibold text-sm hover:text-primary-800 transition-colors mt-auto">
+        Lire l'article
+        <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+        </svg>
+      </a>
+    </div>
+  </article>
+) : (
+  <!-- Standard card -->
+  <article class="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-200/60">
+    <a href={href} class="block overflow-hidden">
+      <div class="aspect-[16/10] bg-slate-100 relative">
+        <img
+          src={image}
+          alt={imageAlt}
+          width="600"
+          height="375"
+          loading="lazy"
+          decoding="async"
+          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      </div>
+    </a>
+    <div class="p-5">
+      <div class="flex items-center gap-3 mb-3">
+        <CategoryBadge categorie={categorie} />
+        <time datetime={date.toISOString()} class="text-xs text-slate-400 font-medium">
+          {formattedDate}
+        </time>
+      </div>
+      <a href={href} class="block">
+        <h3 class="font-display text-lg font-bold text-navy-800 mb-2 group-hover:text-primary-700 transition-colors leading-snug tracking-tight line-clamp-2">
+          {title}
+        </h3>
+      </a>
+      <p class="text-sm text-slate-500 line-clamp-2 leading-relaxed">{description}</p>
+    </div>
+    <!-- Bottom accent bar -->
+    <div class="h-0.5 bg-gradient-to-r from-primary-400 to-accent-400 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+  </article>
+)}

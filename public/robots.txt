@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Disallow: /api/
+Disallow: /draft/
+
+Sitemap: https://clg-f-legros.fr/sitemap-index.xml

@@ -1,0 +1,220 @@
+@import "tailwindcss";
+
+@theme {
+  /* Teal / Emerald primary — warm & distinctive */
+  --color-primary-50: #f0fdfa;
+  --color-primary-100: #ccfbf1;
+  --color-primary-200: #99f6e4;
+  --color-primary-300: #5eead4;
+  --color-primary-400: #2dd4bf;
+  --color-primary-500: #14b8a6;
+  --color-primary-600: #0d9488;
+  --color-primary-700: #0f766e;
+  --color-primary-800: #115e59;
+  --color-primary-900: #134e4a;
+
+  /* Warm amber accent */
+  --color-accent-50: #fffbeb;
+  --color-accent-100: #fef3c7;
+  --color-accent-200: #fde68a;
+  --color-accent-300: #fcd34d;
+  --color-accent-400: #fbbf24;
+  --color-accent-500: #f59e0b;
+  --color-accent-600: #d97706;
+  --color-accent-700: #b45309;
+
+  /* Deep navy for headers and dark sections */
+  --color-navy-800: #1a1f36;
+  --color-navy-900: #0f1225;
+
+  --font-sans: 'Plus Jakarta Sans', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* --- Prose styles for article content --- */
+.prose h2 {
+  font-family: var(--font-display);
+  font-size: 1.625rem;
+  font-weight: 800;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--color-navy-800);
+  letter-spacing: -0.02em;
+}
+
+.prose h3 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  color: var(--color-navy-800);
+}
+
+.prose p {
+  margin-bottom: 1.25rem;
+  line-height: 1.8;
+  color: #475569;
+}
+
+.prose ul, .prose ol {
+  margin-bottom: 1.25rem;
+  padding-left: 1.5rem;
+}
+
+.prose ul { list-style-type: disc; }
+.prose ol { list-style-type: decimal; }
+
+.prose li {
+  margin-bottom: 0.5rem;
+  line-height: 1.8;
+  color: #475569;
+}
+
+.prose li::marker {
+  color: var(--color-primary-500);
+}
+
+.prose a {
+  color: var(--color-primary-700);
+  text-decoration: underline;
+  text-decoration-color: var(--color-primary-300);
+  text-underline-offset: 3px;
+  transition: all 0.15s;
+}
+
+.prose a:hover {
+  color: var(--color-primary-900);
+  text-decoration-color: var(--color-primary-600);
+}
+
+.prose blockquote {
+  border-left: 4px solid var(--color-accent-400);
+  padding-left: 1.25rem;
+  margin: 2rem 0;
+  font-style: italic;
+  color: #64748b;
+  background: var(--color-accent-50);
+  padding: 1rem 1.25rem;
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.prose img {
+  border-radius: 0.75rem;
+  margin: 2rem 0;
+}
+
+.prose strong {
+  font-weight: 700;
+  color: var(--color-navy-800);
+}
+
+.prose hr {
+  border: none;
+  height: 2px;
+  background: linear-gradient(to right, var(--color-primary-200), var(--color-accent-200), transparent);
+  margin: 2.5rem 0;
+}
+
+/* --- Tables --- */
+.prose table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 1.5rem 0 2rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  border: 1px solid #e2e8f0;
+}
+
+.prose thead {
+  background: var(--color-navy-800);
+  color: #fff;
+}
+
+.prose thead th {
+  padding: 0.75rem 1rem;
+  font-weight: 700;
+  font-family: var(--font-display);
+  text-align: left;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.prose thead th:first-child {
+  border-top-left-radius: 0.75rem;
+}
+
+.prose thead th:last-child {
+  border-top-right-radius: 0.75rem;
+}
+
+.prose tbody tr {
+  transition: background 0.15s;
+}
+
+.prose tbody tr:nth-child(even) {
+  background: #f8fafc;
+}
+
+.prose tbody tr:hover {
+  background: var(--color-primary-50);
+}
+
+.prose tbody td {
+  padding: 0.625rem 1rem;
+  color: #475569;
+  border-top: 1px solid #e2e8f0;
+}
+
+.prose tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 0.75rem;
+}
+
+.prose tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 0.75rem;
+}
+
+/* Responsive tables */
+@media (max-width: 640px) {
+  .prose table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .prose thead th,
+  .prose tbody td {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8125rem;
+  }
+}
+
+/* --- Code inline --- */
+.prose code:not(pre code) {
+  background: #f1f5f9;
+  color: var(--color-primary-800);
+  padding: 0.15em 0.4em;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+  font-weight: 500;
+}
+
+/* --- Code blocks --- */
+.prose pre {
+  background: var(--color-navy-900);
+  color: #e2e8f0;
+  padding: 1.25rem;
+  border-radius: 0.75rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  font-size: 0.875rem;
+  line-height: 1.7;
+}

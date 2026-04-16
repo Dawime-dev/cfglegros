@@ -1,0 +1,68 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+---
+
+<BaseLayout
+  title="Mentions légales | CLG F. Legros"
+  description="Mentions légales du site clg-f-legros.fr : éditeur, hébergeur, protection des données personnelles."
+  noindex={true}
+>
+  <div class="max-w-3xl mx-auto px-4 py-8">
+    <Breadcrumb items={[{ label: 'Mentions légales' }]} />
+
+    <h1 class="text-3xl font-bold text-slate-900 mb-6">Mentions légales</h1>
+
+    <div class="prose max-w-none">
+      <h2>Éditeur du site</h2>
+      <p>
+        Le site <strong>clg-f-legros.fr</strong> est édité par :<br />
+        [Nom / Raison sociale]<br />
+        [Adresse]<br />
+        [Email de contact]<br />
+        [Numéro SIRET le cas échéant]
+      </p>
+
+      <h2>Directeur de la publication</h2>
+      <p>[Nom du directeur de publication]</p>
+
+      <h2>Hébergeur</h2>
+      <p>
+        [Nom de l'hébergeur]<br />
+        [Adresse de l'hébergeur]<br />
+        [Téléphone / Site web de l'hébergeur]
+      </p>
+
+      <h2>Propriété intellectuelle</h2>
+      <p>
+        L'ensemble du contenu du site clg-f-legros.fr (textes, images, vidéos, logos, icônes) est protégé par le droit d'auteur. Toute reproduction, représentation ou diffusion, en tout ou partie, du contenu de ce site est interdite sans l'autorisation préalable de l'éditeur.
+      </p>
+
+      <h2>Protection des données personnelles</h2>
+      <p>
+        Conformément au Règlement Général sur la Protection des Données (RGPD) et à la loi Informatique et Libertés, vous disposez d'un droit d'accès, de rectification, de suppression et d'opposition aux données personnelles vous concernant.
+      </p>
+      <p>
+        Pour exercer ces droits, vous pouvez nous contacter à l'adresse suivante : [email de contact].
+      </p>
+      <p>
+        Les données personnelles collectées via le formulaire de contact sont utilisées uniquement pour répondre à vos demandes. Elles ne sont ni vendues ni transmises à des tiers.
+      </p>
+
+      <h2>Cookies</h2>
+      <p>
+        Ce site n'utilise pas de cookies de suivi publicitaire. Seuls des cookies techniques nécessaires au bon fonctionnement du site peuvent être déposés sur votre navigateur.
+      </p>
+
+      <h2>Liens hypertextes</h2>
+      <p>
+        Le site clg-f-legros.fr peut contenir des liens vers d'autres sites internet. L'éditeur ne peut être tenu responsable du contenu de ces sites externes.
+      </p>
+
+      <h2>Crédits</h2>
+      <p>
+        Site réalisé avec <a href="https://astro.build" rel="noopener noreferrer" target="_blank">Astro</a>.
+      </p>
+    </div>
+  </div>
+</BaseLayout>

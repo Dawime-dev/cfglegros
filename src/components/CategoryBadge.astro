@@ -1,0 +1,20 @@
+---
+import { categories, type CategoryKey } from '../lib/categories';
+
+interface Props {
+  categorie: CategoryKey;
+  linked?: boolean;
+}
+
+const { categorie, linked = true } = Astro.props;
+const cat = categories[categorie];
+const classes = `inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-md ring-1 ring-inset ${cat.color}`;
+---
+
+{linked ? (
+  <a href={`/categorie/${categorie}`} class={`${classes} hover:brightness-95 transition-all`}>
+    {cat.label}
+  </a>
+) : (
+  <span class={classes}>{cat.label}</span>
+)}

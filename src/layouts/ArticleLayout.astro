@@ -1,0 +1,161 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import CategoryBadge from '../components/CategoryBadge.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import type { CategoryKey } from '../lib/categories';
+import { categories } from '../lib/categories';
+
+interface Props {
+  title: string;
+  description: string;
+  image: string;
+  imageAlt: string;
+  date: Date;
+  dateModified?: Date;
+  auteur: string;
+  categorie: CategoryKey;
+  relatedArticles?: Array<{
+    id: string;
+    data: {
+      title: string;
+      description: string;
+      image: string;
+      imageAlt: string;
+      date: Date;
+      categorie: CategoryKey;
+    };
+  }>;
+}
+
+const {
+  title,
+  description,
+  image,
+  imageAlt,
+  date,
+  dateModified,
+  auteur,
+  categorie,
+  relatedArticles = [],
+} = Astro.props;
+
+const formattedDate = date.toLocaleDateString('fr-FR', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+const cat = categories[categorie];
+
+const site = Astro.site?.href ?? 'https://clg-f-legros.fr';
+const canonicalUrl = new URL(Astro.url.pathname, site).href;
+const imageUrl = new URL(image, site).href;
+
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description: description,
+  image: imageUrl,
+  author: { '@type': 'Person', name: auteur },
+  publisher: {
+    '@type': 'Organization',
+    name: 'CLG F. Legros',
+    logo: { '@type': 'ImageObject', url: new URL('/favicon.svg', site).href },
+  },
+  datePublished: date.toISOString(),
+  dateModified: (dateModified ?? date).toISOString(),
+  mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalUrl },
+};
+---
+
+<BaseLayout
+  title={`${title} | CLG F. Legros`}
+  description={description}
+  image={image}
+  imageAlt={imageAlt}
+  type="article"
+  publishedDate={date}
+  modifiedDate={dateModified}
+  author={auteur}
+  jsonLd={articleJsonLd}
+>
+  <!-- Article header with full-width image -->
+  <div class="bg-navy-900 pt-6 pb-0">
+    <div class="max-w-4xl mx-auto px-4">
+      <Breadcrumb dark items={[
+        { label: cat.label, href: `/categorie/${categorie}` },
+        { label: title },
+      ]} />
+    </div>
+  </div>
+
+  <div class="max-w-4xl mx-auto px-4">
+    <article>
+      <!-- Header -->
+      <header class="pt-8 pb-6">
+        <div class="flex items-center gap-3 mb-5">
+          <CategoryBadge categorie={categorie} />
+          <span class="text-slate-300">|</span>
+          <time datetime={date.toISOString()} class="text-sm text-slate-500 font-medium">
+            {formattedDate}
+          </time>
+          <span class="text-slate-300">|</span>
+          <span class="text-sm text-slate-500 font-medium">{auteur}</span>
+        </div>
+        <h1 class="font-display text-3xl md:text-4xl lg:text-[2.75rem] font-extrabold text-navy-800 leading-[1.15] tracking-tight mb-6">
+          {title}
+        </h1>
+        <p class="text-lg text-slate-500 leading-relaxed">{description}</p>
+      </header>
+
+      <!-- Featured image -->
+      <div class="rounded-2xl overflow-hidden bg-slate-100 mb-10 shadow-lg shadow-slate-200/50">
+        <img
+          src={image}
+          alt={imageAlt}
+          width="960"
+          height="540"
+          class="w-full h-auto object-cover"
+        />
+      </div>
+
+      <!-- Content -->
+      <div class="prose max-w-none pb-12">
+        <slot />
+      </div>
+
+      <!-- Tags / share -->
+      <div class="border-t border-slate-200 py-6 mb-8">
+        <div class="flex items-center gap-3 text-sm text-slate-500">
+          <span class="font-medium text-slate-700">Catégorie :</span>
+          <CategoryBadge categorie={categorie} />
+        </div>
+      </div>
+    </article>
+
+    <!-- Related articles -->
+    {relatedArticles.length > 0 && (
+      <aside class="border-t border-slate-200 pt-12 pb-16">
+        <div class="mb-8">
+          <span class="text-primary-600 font-semibold text-sm uppercase tracking-wider">À lire aussi</span>
+          <h2 class="font-display text-2xl font-extrabold text-navy-800 tracking-tight mt-1">Articles similaires</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {relatedArticles.slice(0, 3).map((article) => (
+            <ArticleCard
+              title={article.data.title}
+              description={article.data.description}
+              image={article.data.image}
+              imageAlt={article.data.imageAlt}
+              date={article.data.date}
+              categorie={article.data.categorie}
+              href={`/articles/${article.id}`}
+            />
+          ))}
+        </div>
+      </aside>
+    )}
+  </div>
+</BaseLayout>

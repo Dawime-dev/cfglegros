@@ -1,0 +1,53 @@
+---
+import JsonLd from './JsonLd.astro';
+
+interface BreadcrumbItem {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  items: BreadcrumbItem[];
+  dark?: boolean;
+}
+
+const { items, dark = false } = Astro.props;
+const site = Astro.site?.href ?? 'https://clg-f-legros.fr';
+
+const allItems = [{ label: 'Accueil', href: '/' }, ...items];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: allItems.map((item, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: item.label,
+    ...(item.href ? { item: new URL(item.href, site).href } : {}),
+  })),
+};
+---
+
+<JsonLd data={jsonLd} />
+<nav aria-label="Fil d'Ariane" class:list={['text-sm mb-6', dark ? 'text-slate-400' : 'text-slate-500']}>
+  <ol class="flex flex-wrap items-center gap-1">
+    {allItems.map((item, index) => (
+      <li class="flex items-center gap-1">
+        {index > 0 && (
+          <svg class:list={['w-3.5 h-3.5', dark ? 'text-slate-600' : 'text-slate-300']} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        )}
+        {item.href ? (
+          <a href={item.href} class:list={['transition-colors', dark ? 'hover:text-primary-400' : 'hover:text-primary-600']}>
+            {item.label}
+          </a>
+        ) : (
+          <span class:list={['font-medium truncate max-w-[200px]', dark ? 'text-slate-200' : 'text-slate-700']} aria-current="page">
+            {item.label}
+          </span>
+        )}
+      </li>
+    ))}
+  </ol>
+</nav>

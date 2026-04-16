@@ -1,0 +1,86 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import { getCollection } from 'astro:content';
+import { categories, type CategoryKey } from '../../lib/categories';
+
+export async function getStaticPaths() {
+  return Object.keys(categories).map((key) => ({
+    params: { categorie: key },
+  }));
+}
+
+const { categorie } = Astro.params as { categorie: CategoryKey };
+const cat = categories[categorie];
+
+const allArticles = await getCollection('articles', ({ data }) => !data.draft && data.categorie === categorie);
+const sortedArticles = allArticles.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const collectionJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: cat.label,
+  description: cat.description,
+  url: `https://clg-f-legros.fr/categorie/${categorie}`,
+};
+---
+
+<BaseLayout
+  title={`${cat.label} | CLG F. Legros`}
+  description={cat.description}
+  jsonLd={collectionJsonLd}
+>
+  <div class="max-w-6xl mx-auto px-4 py-8">
+    <Breadcrumb items={[{ label: cat.label }]} />
+
+    <div class="mb-10">
+      <span class="text-primary-600 font-semibold text-sm uppercase tracking-wider">Catégorie</span>
+      <h1 class="font-display text-3xl md:text-4xl font-extrabold text-navy-800 tracking-tight mt-1">{cat.label}</h1>
+      <p class="text-slate-500 mt-2 max-w-xl">{cat.description}</p>
+    </div>
+
+    <!-- Back to all categories -->
+    <div class="flex flex-wrap gap-2 mb-10">
+      <a href="/articles" class="px-4 py-2 text-sm font-medium rounded-lg border border-slate-200 text-slate-600 hover:border-primary-300 hover:text-primary-700 hover:bg-primary-50/50 transition-all">
+        Tous
+      </a>
+      {Object.entries(categories).map(([key, c]) => (
+        <a
+          href={`/categorie/${key}`}
+          class:list={[
+            'px-4 py-2 text-sm font-semibold rounded-lg transition-all',
+            key === categorie
+              ? 'bg-primary-600 text-white shadow-sm'
+              : 'border border-slate-200 text-slate-600 hover:border-primary-300 hover:text-primary-700 hover:bg-primary-50/50',
+          ]}
+        >
+          {c.label}
+        </a>
+      ))}
+    </div>
+
+    {sortedArticles.length > 0 ? (
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {sortedArticles.map((article) => (
+          <ArticleCard
+            title={article.data.title}
+            description={article.data.description}
+            image={article.data.image}
+            imageAlt={article.data.imageAlt}
+            date={article.data.date}
+            categorie={article.data.categorie}
+            href={`/articles/${article.id}`}
+          />
+        ))}
+      </div>
+    ) : (
+      <div class="text-center py-20">
+        <p class="text-slate-400 text-lg">Aucun article dans cette catégorie pour le moment.</p>
+        <a href="/articles" class="inline-flex items-center gap-1.5 text-primary-600 font-semibold text-sm mt-4 hover:text-primary-800 transition-colors">
+          Voir tous les articles &rarr;
+        </a>
+      </div>
+    )}
+  </div>
+</BaseLayout>

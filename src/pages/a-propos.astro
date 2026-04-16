@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+---
+
+<BaseLayout
+  title="À propos | CLG F. Legros"
+  description="Découvrez la mission de CLG F. Legros : vous guider dans vos choix de métier, de formation et d'école."
+>
+  <div class="max-w-3xl mx-auto px-4 py-8">
+    <Breadcrumb items={[{ label: 'À propos' }]} />
+
+    <div class="mb-8">
+      <span class="text-primary-600 font-semibold text-sm uppercase tracking-wider">Qui sommes-nous</span>
+      <h1 class="font-display text-3xl md:text-4xl font-extrabold text-navy-800 tracking-tight mt-1">À propos de CLG F. Legros</h1>
+    </div>
+
+    <div class="prose max-w-none">
+      <p>
+        <strong>CLG F. Legros</strong> est un média en ligne dédié à l'orientation, la formation et la découverte des métiers. Notre mission est de vous fournir des informations fiables et accessibles pour vous aider à construire votre parcours professionnel.
+      </p>
+
+      <h2>Notre mission</h2>
+      <p>
+        Nous croyons que chacun mérite d'avoir accès à une information claire et complète pour faire les bons choix. Que vous soyez collégien en pleine réflexion, étudiant à la recherche de votre voie, ou adulte en reconversion, nous sommes là pour vous accompagner.
+      </p>
+
+      <h2>Ce que nous proposons</h2>
+      <ul>
+        <li><strong>Des fiches métiers détaillées</strong> pour comprendre les réalités de chaque profession</li>
+        <li><strong>Des guides pratiques sur la formation</strong> : alternance, CPF, VAE, formation continue</li>
+        <li><strong>Des conseils pour choisir son école</strong> : labels, certifications, critères de qualité</li>
+        <li><strong>Des actualités</strong> sur l'éducation, les réformes et les aides disponibles</li>
+        <li><strong>Des outils d'orientation</strong> pour vous aider à trouver votre voie</li>
+      </ul>
+
+      <h2>Nos valeurs</h2>
+      <ul>
+        <li><strong>Fiabilité</strong> : nous vérifions nos sources et actualisons régulièrement nos contenus</li>
+        <li><strong>Accessibilité</strong> : nous écrivons de manière claire, sans jargon inutile</li>
+        <li><strong>Neutralité</strong> : nous ne favorisons aucun établissement ni aucune formation</li>
+        <li><strong>Gratuité</strong> : l'ensemble de nos contenus est accessible gratuitement</li>
+      </ul>
+
+      <h2>Nous contacter</h2>
+      <p>
+        Vous avez une question, une suggestion ou souhaitez contribuer ? N'hésitez pas à nous <a href="/contact">contacter</a>.
+      </p>
+    </div>
+  </div>
+</BaseLayout>

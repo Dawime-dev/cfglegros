@@ -1,0 +1,62 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="bg-navy-900 text-slate-400 mt-0">
+  <!-- Gradient separator -->
+  <div class="h-1 bg-gradient-to-r from-primary-500 via-accent-400 to-primary-500"></div>
+
+  <div class="max-w-6xl mx-auto px-4 py-14">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
+      <!-- Brand -->
+      <div class="md:col-span-1">
+        <a href="/" class="flex items-center gap-2.5 mb-4">
+          <span class="w-9 h-9 bg-gradient-to-br from-primary-400 to-accent-500 rounded-lg flex items-center justify-center text-white font-extrabold text-sm shadow-lg shadow-primary-500/20">
+            CL
+          </span>
+          <span class="text-white font-display font-bold text-lg tracking-tight">
+            CLG <span class="text-primary-400">F. Legros</span>
+          </span>
+        </a>
+        <p class="text-sm leading-relaxed">
+          Votre guide pour découvrir les métiers, choisir votre formation et trouver l'école qui vous correspond.
+        </p>
+      </div>
+
+      <!-- Categories -->
+      <div>
+        <h2 class="text-white font-display font-bold text-sm uppercase tracking-wider mb-4">Catégories</h2>
+        <ul class="space-y-2.5 text-sm">
+          <li><a href="/categorie/metiers" class="hover:text-primary-400 transition-colors">Métiers</a></li>
+          <li><a href="/categorie/formations" class="hover:text-primary-400 transition-colors">Formations</a></li>
+          <li><a href="/categorie/ecoles" class="hover:text-primary-400 transition-colors">Écoles</a></li>
+          <li><a href="/categorie/orientation" class="hover:text-primary-400 transition-colors">Orientation</a></li>
+          <li><a href="/categorie/actualites" class="hover:text-primary-400 transition-colors">Actualités</a></li>
+        </ul>
+      </div>
+
+      <!-- Navigation -->
+      <div>
+        <h2 class="text-white font-display font-bold text-sm uppercase tracking-wider mb-4">Navigation</h2>
+        <ul class="space-y-2.5 text-sm">
+          <li><a href="/" class="hover:text-primary-400 transition-colors">Accueil</a></li>
+          <li><a href="/articles" class="hover:text-primary-400 transition-colors">Tous les articles</a></li>
+          <li><a href="/a-propos" class="hover:text-primary-400 transition-colors">À propos</a></li>
+          <li><a href="/contact" class="hover:text-primary-400 transition-colors">Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- Legal -->
+      <div>
+        <h2 class="text-white font-display font-bold text-sm uppercase tracking-wider mb-4">Légal</h2>
+        <ul class="space-y-2.5 text-sm">
+          <li><a href="/mentions-legales" class="hover:text-primary-400 transition-colors">Mentions légales</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="border-t border-white/10 mt-10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
+      <p>&copy; {currentYear} CLG F. Legros. Tous droits réservés.</p>
+    </div>
+  </div>
+</footer>

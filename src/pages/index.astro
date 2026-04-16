@@ -1,0 +1,214 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import JsonLd from '../components/JsonLd.astro';
+import { getCollection } from 'astro:content';
+import { categories, type CategoryKey } from '../lib/categories';
+
+const allArticles = await getCollection('articles', ({ data }) => !data.draft);
+const sortedArticles = allArticles.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const featuredArticle = sortedArticles[0];
+const recentArticles = sortedArticles.slice(1, 7);
+
+const articlesByCategory = Object.keys(categories).reduce((acc, key) => {
+  const cat = key as CategoryKey;
+  acc[cat] = sortedArticles.filter((a) => a.data.categorie === cat).slice(0, 3);
+  return acc;
+}, {} as Record<CategoryKey, typeof sortedArticles>);
+
+const faqItems = [
+  {
+    question: 'Comment choisir le bon métier ?',
+    answer: "Commencez par un bilan de vos compétences et intérêts, explorez les fiches métiers, rencontrez des professionnels et testez via des stages ou immersions. Un conseiller d'orientation peut vous accompagner dans cette démarche.",
+  },
+  {
+    question: 'Quelles sont les aides pour financer sa formation ?',
+    answer: "Plusieurs dispositifs existent : le Compte Personnel de Formation (CPF), les aides de France Travail, les bourses régionales, l'alternance (formation gratuite et rémunérée), et les prêts étudiants à taux préférentiels.",
+  },
+  {
+    question: "Comment savoir si une école est reconnue par l'État ?",
+    answer: "Vérifiez que l'établissement possède la certification Qualiopi et que ses diplômes sont inscrits au RNCP (Répertoire National des Certifications Professionnelles). Vous pouvez consulter le site France Compétences pour ces vérifications.",
+  },
+  {
+    question: "L'alternance est-elle faite pour moi ?",
+    answer: "L'alternance convient à ceux qui préfèrent apprendre en pratiquant. Elle offre une rémunération, une expérience professionnelle et un excellent taux d'insertion. Elle demande cependant rigueur et organisation pour concilier cours et entreprise.",
+  },
+];
+
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'CLG F. Legros',
+  url: 'https://clg-f-legros.fr',
+  description: 'Votre guide pour découvrir les métiers, choisir votre formation et trouver l\'école qui vous correspond.',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: 'https://clg-f-legros.fr/articles?q={search_term_string}',
+    'query-input': 'required name=search_term_string',
+  },
+};
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+};
+---
+
+<BaseLayout
+  title="CLG F. Legros | Métiers, Formations & Écoles"
+  description="Votre guide pour découvrir les métiers, choisir votre formation et trouver l'école qui vous correspond. Articles, guides et actualités."
+  jsonLd={[websiteJsonLd, faqJsonLd]}
+>
+  <Hero
+    title="Votre avenir commence ici"
+    subtitle="Découvrez les métiers qui recrutent, trouvez la bonne formation et choisissez l'école qui vous correspond."
+  />
+
+  <!-- Featured article -->
+  {featuredArticle && (
+    <section class="max-w-6xl mx-auto px-4 -mt-8 relative z-10 mb-12">
+      <ArticleCard
+        title={featuredArticle.data.title}
+        description={featuredArticle.data.description}
+        image={featuredArticle.data.image}
+        imageAlt={featuredArticle.data.imageAlt}
+        date={featuredArticle.data.date}
+        categorie={featuredArticle.data.categorie}
+        href={`/articles/${featuredArticle.id}`}
+        featured={true}
+      />
+    </section>
+  )}
+
+  <!-- Articles récents -->
+  <section class="max-w-6xl mx-auto px-4 py-12">
+    <div class="flex items-end justify-between mb-8">
+      <div>
+        <span class="text-primary-600 font-semibold text-sm uppercase tracking-wider">Blog</span>
+        <h2 class="font-display text-3xl font-extrabold text-navy-800 tracking-tight mt-1">Articles récents</h2>
+      </div>
+      <a href="/articles" class="hidden sm:inline-flex items-center gap-1.5 text-primary-600 font-semibold text-sm hover:text-primary-800 transition-colors">
+        Tout voir
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+        </svg>
+      </a>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {recentArticles.map((article) => (
+        <ArticleCard
+          title={article.data.title}
+          description={article.data.description}
+          image={article.data.image}
+          imageAlt={article.data.imageAlt}
+          date={article.data.date}
+          categorie={article.data.categorie}
+          href={`/articles/${article.id}`}
+        />
+      ))}
+    </div>
+    <a href="/articles" class="sm:hidden inline-flex items-center gap-1.5 text-primary-600 font-semibold text-sm hover:text-primary-800 transition-colors mt-6">
+      Voir tous les articles &rarr;
+    </a>
+  </section>
+
+  <!-- Categories showcase -->
+  <section class="bg-white border-y border-slate-200/60 py-16">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="text-center mb-12">
+        <span class="text-primary-600 font-semibold text-sm uppercase tracking-wider">Explorer</span>
+        <h2 class="font-display text-3xl font-extrabold text-navy-800 tracking-tight mt-1">Parcourir par catégorie</h2>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        {Object.entries(categories).map(([key, cat]) => {
+          const count = articlesByCategory[key as CategoryKey]?.length ?? 0;
+          return (
+            <a
+              href={`/categorie/${key}`}
+              class="group relative overflow-hidden rounded-xl border border-slate-200/60 p-6 hover:border-primary-300 hover:shadow-lg hover:shadow-primary-500/5 transition-all duration-300 bg-gradient-to-br from-white to-slate-50"
+            >
+              <div class="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-primary-100/50 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <h3 class="font-display font-bold text-navy-800 mb-1 group-hover:text-primary-700 transition-colors">{cat.label}</h3>
+              <p class="text-xs text-slate-400">{count} article{count > 1 ? 's' : ''}</p>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <!-- Sections par catégorie -->
+  {Object.entries(articlesByCategory).map(([key, articles], idx) => {
+    if (articles.length === 0) return null;
+    const cat = categories[key as CategoryKey];
+    const isAlt = idx % 2 === 1;
+    return (
+      <section class:list={['py-14', isAlt ? 'bg-white' : 'bg-slate-50']}>
+        <div class="max-w-6xl mx-auto px-4">
+          <div class="flex items-end justify-between mb-8">
+            <div>
+              <span class="text-primary-600 font-semibold text-sm uppercase tracking-wider">{cat.label}</span>
+              <h2 class="font-display text-2xl font-extrabold text-navy-800 tracking-tight mt-1">{cat.description.split('.')[0]}</h2>
+            </div>
+            <a href={`/categorie/${key}`} class="hidden sm:inline-flex items-center gap-1.5 text-primary-600 font-semibold text-sm hover:text-primary-800 transition-colors">
+              Tout voir
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </a>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {articles.map((article) => (
+              <ArticleCard
+                title={article.data.title}
+                description={article.data.description}
+                image={article.data.image}
+                imageAlt={article.data.imageAlt}
+                date={article.data.date}
+                categorie={article.data.categorie}
+                href={`/articles/${article.id}`}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  })}
+
+  <!-- FAQ -->
+  <section class="bg-navy-900 py-20 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-[0.05]" style="background-image: radial-gradient(circle at 1px 1px, white 1px, transparent 0); background-size: 24px 24px;"></div>
+    <div class="absolute top-0 left-1/2 w-96 h-96 bg-primary-500/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+
+    <div class="relative max-w-3xl mx-auto px-4">
+      <div class="text-center mb-12">
+        <span class="text-primary-400 font-semibold text-sm uppercase tracking-wider">FAQ</span>
+        <h2 class="font-display text-3xl font-extrabold text-white tracking-tight mt-1">Questions fréquentes</h2>
+      </div>
+      <div class="space-y-3">
+        {faqItems.map((item) => (
+          <details class="group bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 hover:border-white/20 transition-colors">
+            <summary class="cursor-pointer px-6 py-5 font-display font-semibold text-white flex items-center justify-between gap-4">
+              <span>{item.question}</span>
+              <svg class="w-5 h-5 text-primary-400 shrink-0 group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </summary>
+            <div class="px-6 pb-5 text-slate-300 leading-relaxed">
+              {item.answer}
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

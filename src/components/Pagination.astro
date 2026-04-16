@@ -1,0 +1,57 @@
+---
+interface Props {
+  currentPage: number;
+  totalPages: number;
+  baseUrl: string;
+}
+
+const { currentPage, totalPages, baseUrl } = Astro.props;
+
+function pageUrl(page: number): string {
+  return page === 1 ? baseUrl : `${baseUrl}/${page}`;
+}
+
+const prevPage = currentPage > 1 ? pageUrl(currentPage - 1) : null;
+const nextPage = currentPage < totalPages ? pageUrl(currentPage + 1) : null;
+const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+---
+
+{totalPages > 1 && (
+  <nav aria-label="Pagination" class="flex justify-center items-center gap-2 mt-12">
+    {prevPage ? (
+      <a href={prevPage} class="px-3 py-2 text-sm rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50 transition-colors" aria-label="Page précédente">
+        Précédent
+      </a>
+    ) : (
+      <span class="px-3 py-2 text-sm rounded-lg border border-slate-200 text-slate-400 cursor-not-allowed">
+        Précédent
+      </span>
+    )}
+
+    {pages.map((page) => (
+      <a
+        href={pageUrl(page)}
+        class:list={[
+          'px-3 py-2 text-sm rounded-lg transition-colors',
+          page === currentPage
+            ? 'bg-primary-600 text-white font-semibold'
+            : 'border border-slate-300 text-slate-700 hover:bg-slate-50',
+        ]}
+        aria-current={page === currentPage ? 'page' : undefined}
+        aria-label={`Page ${page}`}
+      >
+        {page}
+      </a>
+    ))}
+
+    {nextPage ? (
+      <a href={nextPage} class="px-3 py-2 text-sm rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50 transition-colors" aria-label="Page suivante">
+        Suivant
+      </a>
+    ) : (
+      <span class="px-3 py-2 text-sm rounded-lg border border-slate-200 text-slate-400 cursor-not-allowed">
+        Suivant
+      </span>
+    )}
+  </nav>
+)}
