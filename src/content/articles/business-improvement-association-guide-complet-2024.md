@@ -1,10 +1,14 @@
 ---
 title: "Business Improvement Association : guide complet 2024"
 description: "Découvrez comment une Business Improvement Association booste fréquentation et CA. Financement, gouvernance et création en 6 étapes — données chiffrées."
-category: "general"
-date: "2026-04-16"
-schema_type: "Article"
+categorie: "metiers"
+tags: []
 image: "/images/articles/69e10555083a6-featured.webp"
+imageAlt: "Business Improvement Association : guide complet 2024"
+auteur: "Équipe clg-f-legros.fr"
+date: "2026-04-16"
+dateModified: "2026-04-17"
+draft: false
 ---
 
 En 1970, des commerçants d'un quartier de Toronto ont inventé un outil qui allait transformer la gestion des rues commerçantes dans le monde entier. Aujourd'hui, une **Business Improvement Association** (BIA) peut faire augmenter la fréquentation piétonne d'une zone, réduire la vacance commerciale et mutualiser des budgets inaccessibles pour un commerçant seul.
